@@ -87,6 +87,23 @@
 
   </style>
 </head>
+    <script>
+// Verifica se há dados armazenados
+if (localStorage.getItem("ensinoIA")) {
+  document.getElementById("dadosIA").innerText = localStorage.getItem("ensinoIA");
+}
+
+// Função para guardar dados
+function guardarDadosIA() {
+  const entrada = document.getElementById("entradaIA").value;
+  if (entrada.trim() !== "") {
+    localStorage.setItem("ensinoIA", entrada);
+    alert("Informação guardada para a IA!");
+    document.getElementById("dadosIA").innerText = entrada;
+    document.getElementById("entradaIA").value = "";
+  }
+}
+    </script>
 <body>
 
 <header>
