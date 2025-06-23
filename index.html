@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TECLA IA INCLUSIVA</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #d92323;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .floating-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .emoji-panel {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: white;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .emoji-panel p {
+      margin: 0 0 0.5rem;
+    }
+
+    .emoji-button, .train-button {
+      font-size: 1.5rem;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background 0.3s;
+    }
+
+    .emoji-button:hover, .train-button:hover {
+      background: #f0f0f0;
+    }
+
+    #fileUpload {
+      display: none;
+    }
+
+    #fileList {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    #fileList li {
+      padding: 0.3rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    TECLA IA INCLUSIVA 1.0
+  </header>
+
+  <main>
+    <h2>Bem-vindo(a) à IA inclusiva!</h2>
+    <p>Este é um espaço onde podes interagir com uma inteligência artificial de forma acessível e amigável.</p>
+    <p>Usa os botões abaixo para aprender ou ensinar novas informações à IA.</p>
+
+    <div id="fileListContainer">
+      <h3>📂 Arquivos ensinados à IA:</h3>
+      <ul id="fileList"></ul>
+    </div>
+  </main>
+
+  <!-- Painel de emojis -->
+  <div class="emoji-panel" id="emojiPanel">
+    <p>👋 Olá! Clica em “Ensinar IA” para adicionar novos conteúdos.</p>
+    <p>💡 Podes usar isso para treinar com textos, vídeos ou imagens.</p>
+  </div>
+
+  <!-- Botões flutuantes -->
+  <div class="floating-button">
+    <button class="emoji-button" onclick="toggleEmojiPanel()">📘 Ajuda</button>
+    <button class="train-button" onclick="document.getElementById('fileUpload').click()">📚 Ensinar IA</button>
+    <input type="file" id="fileUpload" multiple onchange="handleFiles(this.files)">
+  </div>
+
+  <script>
+    function toggleEmojiPanel() {
+      const panel = document.getElementById("emojiPanel");
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
+    }
+
+    function handleFiles(files) {
+      const fileList = document.getElementById("fileList");
+      const stored = JSON.parse(localStorage.getItem("uploadedFiles") || "[]");
+
+      for (let file of files) {
+        stored.push(file.name);
+      }
+
+      localStorage.setItem("uploadedFiles", JSON.stringify(stored));
+      updateFileList();
+    }
+
+    function updateFileList() {
+      const fileList = document.getElementById("fileList");
+      const stored = JSON.parse(localStorage.getItem("uploadedFiles") || "[]");
+
+      fileList.innerHTML = "";
+      stored.forEach(file => {
+        const li = document.createElement("li");
+        li.textContent = "✅ " + file;
+        fileList.appendChild(li);
+      });
+    }
+
+    window.onload = updateFileList;
+  </script>
+
+</body>
+</html>
