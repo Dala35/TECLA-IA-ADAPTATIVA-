@@ -1,166 +1,99 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TECLA - IA Inclusiva</title>
+  <title>TECLA - IA Adaptativa</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-
-    header {
-      background: #111;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    .container {
-      padding: 20px;
-    }
-
-    .button {
-      display: inline-block;
-      padding: 10px 15px;
-      margin: 10px 5px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #2d89ef;
-      color: white;
-      transition: background 0.3s;
-    }
-
-    .button:hover {
-      background-color: #1b5fbf;
-    }
-
-    .chat-box {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      background-color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .emoji-panel {
-      display: none;
-      flex-wrap: wrap;
-      margin-top: 15px;
-    }
-
-    .emoji {
-      font-size: 28px;
-      margin: 5px;
-      cursor: pointer;
-    }
-
-    .upload-form {
-      margin-top: 15px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: #777;
-    }
-
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; color:#333; }
+    header{ background:#111; color:#fff; padding:20px; text-align:center; }
+    .container { padding:20px; }
+    .button{ padding:10px 15px; margin:10px 5px; border:none; border-radius:8px; cursor:pointer; background:#2d89ef; color:#fff; font-size:16px; }
+    .button:hover{ background:#1b5fbf; }
+    .emoji-panel { display:none; margin-top:15px; flex-wrap:wrap; }
+    .emoji { font-size:28px; margin:5px; cursor:pointer; }
+    .chat-box { background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin-top:15px; max-height:200px; overflow-y:auto; }
+    input, textarea{ width:100%; padding:10px; margin-top:8px; border:1px solid #ccc; border-radius:6px; }
+    #uploadForm{ display:none; margin-top:15px; background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    .msg-user{ color:#2d89ef; margin:5px 0; }
+    .msg-ia{ color:#111; margin:5px 0; }
   </style>
 </head>
-    <script>
-// Verifica se há dados armazenados
-if (localStorage.getItem("ensinoIA")) {
-  document.getElementById("dadosIA").innerText = localStorage.getItem("ensinoIA");
-}
-
-// Função para guardar dados
-function guardarDadosIA() {
-  const entrada = document.getElementById("entradaIA").value;
-  if (entrada.trim() !== "") {
-    localStorage.setItem("ensinoIA", entrada);
-    alert("Informação guardada para a IA!");
-    document.getElementById("dadosIA").innerText = entrada;
-    document.getElementById("entradaIA").value = "";
-  }
-}
-    </script>
 <body>
-<header>
-  <h1>🤖 TECLA – IA Inclusiva para Todos</h1>
-</header>
+  <header><h1>🤖 TECLA – IA Adaptativa</h1></header>
+  <div class="container">
+    <button class="button" onclick="toggleEmojis()">🧩 Emojis</button>
+    <button class="button" onclick="toggleUpload()">📤 Ensinar IA</button>
 
-<div class="container">
+    <div id="emojiPanel" class="emoji-panel">
+      <span class="emoji">😊</span>
+      <span class="emoji">🍽️</span>
+      <span class="emoji">🚽</span>
+      <span class="emoji">🏃</span>
+      <span class="emoji">😢</span>
+      <span class="emoji">🛏️</span>
+      <span class="emoji">📖</span>
+      <span class="emoji">🎵</span>
+      <span class="emoji">⚽</span>
+      <span class="emoji">❤️</span>
+    </div>
 
-  <button class="button" onclick="toggleEmojis()">🧩 Comunicação com Emojis</button>
-  <button class="button" onclick="toggleUpload()">📤 Ensinar a IA</button>
+    <div id="uploadForm">
+      <h3>📚 Ensinar à IA</h3>
+      <textarea id="textTeach" rows="3" placeholder="Escreve aqui..."></textarea>
+      <button class="button" onclick="teachText()">Guardar Texto</button>
+    </div>
 
-  <div id="emojiPanel" class="emoji-panel">
-    <span class="emoji">😊</span>
-    <span class="emoji">🍽️</span>
-    <span class="emoji">🚽</span>
-    <span class="emoji">🏃</span>
-    <span class="emoji">😢</span>
-    <span class="emoji">🛏️</span>
-    <span class="emoji">📖</span>
-    <span class="emoji">🎵</span>
-    <span class="emoji">⚽</span>
-    <span class="emoji">❤️</span>
+    <div class="chat-box" id="chatBox">
+      <p class="msg-ia"><strong>TECLA:</strong> Olá! Estou aqui para aprender e conversar contigo. ✨</p>
+    </div>
+
+    <input type="text" id="userInput" placeholder="Escreve uma mensagem" />
+    <button class="button" onclick="sendMessage()">Enviar</button>
   </div>
 
-  <div id="uploadForm" class="upload-form" style="display:none;">
-    <h3>Enviar Conteúdo para Ensinar a IA</h3>
-    <p>Podes carregar arquivos ou escrever algo que queres ensinar à IA.</p>
-    <input type="file" accept="image/*,video/*,.txt,.pdf" multiple />
-    <textarea rows="4" placeholder="Escreve aqui o conteúdo..."></textarea>
-    <button class="button">📩 Enviar</button>
-  </div>
+  <script>
+    // Visuais
+    function toggleEmojis(){
+      const p = document.getElementById("emojiPanel");
+      p.style.display = p.style.display==="flex"?"none":"flex";
+    }
+    function toggleUpload(){
+      const f = document.getElementById("uploadForm");
+      f.style.display = f.style.display==="block"?"none":"block";
+    }
 
-  <div class="chat-box">
-    <p><strong>TECLA:</strong> Olá! Como posso ajudar hoje?</p>
-  </div>
+    // LocalStorage
+    function teachText(){
+      const txt = document.getElementById("textTeach").value.trim();
+      if(!txt){alert("Escreve algo para me ensinar 😊"); return;}
+      localStorage.setItem("teach", txt);
+      alert("Guardei isso na minha memória! 🧠");
+      document.getElementById("textTeach").value = "";
+    }
 
-</div>
-<div style="margin-top: 2rem; padding: 1rem; border: 1px solid #ccc; border-radius: 10px;">
-  <h3>👨🏽‍🏫 Ensinar a IA</h3>
-  <input type="text" id="entradaIA" placeholder="Escreve aqui o que queres ensinar..." style="width: 100%; padding: 0.5rem;" />
-  <button onclick="guardarDadosIA()" style="margin-top: 0.5rem;">Guardar</button>
-  <p><strong>🧠 Conhecimento atual da IA:</strong></p>
-  <div id="dadosIA" style="background: #f3f3f3; padding: 0.5rem; border-radius: 5px;"></div>
-</div>
-<footer>
-  Desenvolvido por Dala De Carvalho ✊🏽 | Versão 1.0
-</footer>
+    // Chat
+    function sendMessage(){
+      const inp = document.getElementById("userInput");
+      const text = inp.value.trim();
+      if(!text)return;
+      const cb = document.getElementById("chatBox");
 
-<script>
-  function toggleEmojis() {
-    const panel = document.getElementById("emojiPanel");
-    panel.style.display = panel.style.display === "flex" ? "none" : "flex";
-  }
+      cb.innerHTML += `<p class="msg-user"><strong>Tu:</strong> ${text}</p>`;
 
-  function toggleUpload() {
-    const form = document.getElementById("uploadForm");
-    form.style.display = form.style.display === "none" ? "block" : "none";
-  }
-</script>
+      // Resposta com base no que armazenou
+      const learned = localStorage.getItem("teach");
+      let resp = learned? `Grato por partilhares: "${learned}"` : "Ainda não aprendi nada. Usa 'Ensinar IA' para me dar conhecimento.";
+
+      cb.innerHTML += `<p class="msg-ia"><strong>TECLA:</strong> ${resp}</p>`;
+      inp.value="";
+      cb.scrollTop = cb.scrollHeight;
+
+      // Voz
+      const utter = new SpeechSynthesisUtterance(resp);
+      utter.lang = "pt-PT";
+      window.speechSynthesis.speak(utter);
+    }
+  </script>
 </body>
 </html>
